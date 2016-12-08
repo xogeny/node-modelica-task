@@ -4,7 +4,7 @@
   "description": "Node module to run local Modelica simulations",
   "main": "lib/index.js",
   "scripts": {
-    "start": "tsc && lib/server.js",
+    "start": "tsc && node lib/src/server.js",
     "test": "mocha"
   },
   "keywords": [
