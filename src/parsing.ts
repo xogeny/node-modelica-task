@@ -1,5 +1,7 @@
 import parse = require('csv-parse');
 
+export type ColumnMajorResults = { [key: string]: Array<number> };
+
 export async function parseRowMajor(data: string): Promise<Array<Array<any>>> {
     let obj = await new Promise((resolve, reject) => {
         parse(data, { delimiter: "," }, (err, result) => {
@@ -10,7 +12,7 @@ export async function parseRowMajor(data: string): Promise<Array<Array<any>>> {
     return obj as Array<Array<any>>;
 }
 
-export async function parseColumnMajor(data: string): Promise<{ [key: string]: Array<number> }> {
+export async function parseColumnMajor(data: string): Promise<ColumnMajorResults> {
     let rows = await parseRowMajor(data);
     let ret = {};
     rows[0].forEach((heading) => ret[heading] = []);

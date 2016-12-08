@@ -6,7 +6,7 @@ import path = require('path');
 import { parseColumnMajor } from './parsing';
 import { exec } from 'child_process';
 
-export function omSimulate(model: string, source: string): Promise<Result> {
+export function omSimulate(model: string, source: string, stopTime: number): Promise<Result> {
   // Automatically track and cleanup files at exit
   temp.track();
 
@@ -30,7 +30,7 @@ if not cf then
    writeFile("error.txt", e);
    exit(1);
 end if;
-rec := simulate(${model}, fileNamePrefix="${model}", outputFormat="csv", simflags="-noEventEmit");
+rec := simulate(${model}, stopTime=${stopTime}, fileNamePrefix="${model}", outputFormat="csv", simflags="-noEventEmit");
 e := getErrorString();
 rfile := rec.resultFile;
 if rfile=="" then
