@@ -13,14 +13,14 @@ export function run() {
                 let req: Request = job.data;
                 console.log("Got job request: ", req);
                 simulate(req.model, req.source, req.stopTime)
-		  .then((result) => {
-                    console.log("  Success");
-                    done(null, result)
-                  },
-		        (e) => {
-                    console.warn("  Failed: ", e);
-                    done(e)
-                  });
+                    .then((result) => {
+                        console.log("  Success");
+                        done(null, result)
+                    },
+                    (e) => {
+                        console.warn("  Failed: ", e);
+                        done(e)
+                    });
             } catch (e) {
                 done(e);
             }
@@ -28,7 +28,7 @@ export function run() {
     } catch (e) {
         throw new Error("Couldn't initialize kue, redis down?")
     }
-	console.log("Server running and ready for requests");
+    console.log("Server running and ready for requests");
 }
 
 run();

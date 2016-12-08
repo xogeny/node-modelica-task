@@ -14,11 +14,11 @@ describe("Trigger a Modelica simulation", () => {
             let result = await simulate("FirstOrder", firstOrder, 10.0);
             expect(result).to.not.equal(null);
             expect(result).to.haveOwnProperty("time");
-	    expect(result["time"]).to.have.lengthOf(501);
+            expect(result["time"]).to.have.lengthOf(501);
             expect(result).to.haveOwnProperty("x");
-	    expect(result["x"]).to.have.lengthOf(501);
+            expect(result["x"]).to.have.lengthOf(501);
             expect(result).to.haveOwnProperty("der(x)");
-	    expect(result["der(x)"]).to.have.lengthOf(501);
+            expect(result["der(x)"]).to.have.lengthOf(501);
         } catch (e) {
             throw new Error("Simulation should have succeeded");
         }
