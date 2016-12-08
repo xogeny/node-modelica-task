@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "outDir": "./lib",
+        "target": "es6",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "isolatedModules": false,
+        "jsx": "react",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "declaration": true,
+        "noImplicitAny": true,
+        "removeComments": true,
+        "noLib": false,
+        "preserveConstEnums": true,
+        "strictNullChecks": true,
+        "noUnusedLocals": true,
+        "noImplicitThis": true,
+        "noImplicitReturns": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "sourceMap": true
+    },
+    "exclude": ["content", "lib", "node_modules", "static", "docker"]
+}
