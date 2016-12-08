@@ -39,7 +39,6 @@ if rfile=="" then
    exit(1);
 end if;
 `
-        console.log("script = ", script);
         // Write script
         fs.writeFileSync(scriptFile, script);
         // Write modelica file
@@ -47,6 +46,7 @@ end if;
         process.chdir(dirPath);
         // Call omc
         exec("omc " + scriptFile, (err) => {
+          console.log("Job run ", err);
           if (err) {
             resolve(err);
             return;
