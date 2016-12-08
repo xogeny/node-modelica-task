@@ -13,7 +13,8 @@
   "author": "Michael M. Tiller",
   "license": "MIT",
   "dependencies": {
-    "kue": "^0.11.5"
+    "kue": "^0.11.5",
+    "temp": "^0.8.3"
   },
   "devDependencies": {
     "chai": "^3.5.0",

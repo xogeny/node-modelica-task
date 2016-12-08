@@ -2,23 +2,33 @@ import { Result } from './result';
 
 import temp = require('temp');
 import fs = require('fs');
-import util = require('util');
 import path = require('path');
-import { exec } from 'child_process';
+//import { exec } from 'child_process';
 
-const script = `
+export function omSimulate(model: string, source: string): Promise<Result> {
+  // Automatically track and cleanup files at exit
+  temp.track();
+
+  return new Promise((resolve, reject) => {
+    // Open a temporary directory
+    temp.mkdir('modelica-task', function (err, dirPath) {
+      let scriptFile = path.join(dirPath, "run.omc");
+      let modelFile = path.join(dirPath, name + ".mo");
+      let msl = false;
+
+      let script = `
 setModelicaPath(getModelicaPath()+":"+".");
-useMSL := {{msl}};
+useMSL := ${msl};
 if useMSL then
   loadModel(Modelica);
 end if;
-cf := loadModel({{model}});
+cf := loadModel(${model});
 e := getErrorString();
 if not cf then
    writeFile("error.txt", e);
    exit(1);
 end if;
-rec := simulate({{model}}, fileNamePrefix="{{model}}", outputFormat="csv", simflags="-noEventEmit");
+rec := simulate(${model}, fileNamePrefix="${model}", outputFormat="csv", simflags="-noEventEmit");
 e := getErrorString();
 rfile := rec.resultFile;
 if rfile=="" then
@@ -26,29 +36,23 @@ if rfile=="" then
    exit(1);
 end if;
 `
-
-export function omSimulate(name: string, source: string): Promise<Result> {
-       // Automatically track and cleanup files at exit
-       temp.track();
-
-       temp.mkdir('modelica-task', function(err, dirPath) {
-         var inputPath = path.join(dirPath, 'input.tex')
-	   fs.writeFile(inputPath, myData, function(err) {
-	       if (err) throw err;
-    process.chdir(dirPath);
-    exec("texexec '" + inputPath + "'", function(err) {
-      if (err) throw err;
-      fs.readFile(path.join(dirPath, 'input.pdf'), function(err, data) {
-        if (err) throw err;
-        sys.print(data);
-      });
+      // Write script
+      fs.writeFileSync(scriptFile, script);
+      // Write modelica file
+      fs.writeFileSync(modelFile, source);
+      process.chdir(dirPath);
+      console.log("script =\n", source);
+      // Call omc
+      //exec("omc " + scriptFile);
+      // Look for error.txt
+      if (fs.existsSync("error.txt")) {
+        let message = fs.readFileSync("error.txt");
+        reject(new Error(message.toString()));
+        return;
+      }
     });
+    resolve({
+      success: true
+    })
   });
-});
-       // Open a temporary directory
-       // Write modelica file
-       // Write script
-       // Call omc
-       // Look for error.txt
-       return Promise.reject("Unimplemented");
 }
