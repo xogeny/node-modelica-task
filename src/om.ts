@@ -46,21 +46,26 @@ end if;
         fs.writeFileSync(modelFile, source);
         process.chdir(dirPath);
         // Call omc
-        exec("omc " + scriptFile);
-        // Look for error.txt
-        if (fs.existsSync("error.txt")) {
-          let message = fs.readFileSync("error.txt");
-          reject(new Error(message.toString()));
-          return;
-        }
-        let resFile = model+"_res.csv";
-        let results = fs.readFileSync(resFile).toString();
-        parseColumnMajor(results).then((v) => {
-          console.log("Got results!");
-          resolve(v)
-        });
+        exec("omc " + scriptFile, (err) => {
+          if (err) {
+            resolve(err);
+            return;
+          }
+          // Look for error.txt
+          if (fs.existsSync("error.txt")) {
+            let message = fs.readFileSync("error.txt");
+            reject(new Error(message.toString()));
+            return;
+          }
+          let resFile = model + "_res.csv";
+          let results = fs.readFileSync(resFile).toString();
+          parseColumnMajor(results).then((v) => {
+            console.log("Got results!");
+            resolve(v)
+          });
+        })
       } catch (e) {
-        console.error("Error while trying to compile and simulate "+model, e);
+        console.error("Error while trying to compile and simulate " + model, e);
         reject(e);
       }
     });
