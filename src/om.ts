@@ -4,7 +4,7 @@ import temp = require('temp');
 import fs = require('fs');
 import path = require('path');
 import { parseColumnMajor } from './parsing';
-//import { exec } from 'child_process';
+import { exec } from 'child_process';
 
 export function omSimulate(model: string, source: string): Promise<Result> {
   // Automatically track and cleanup files at exit
@@ -46,7 +46,7 @@ end if;
         fs.writeFileSync(modelFile, source);
         process.chdir(dirPath);
         // Call omc
-        //exec("omc " + scriptFile);
+        exec("omc " + scriptFile);
         // Look for error.txt
         if (fs.existsSync("error.txt")) {
           let message = fs.readFileSync("error.txt");

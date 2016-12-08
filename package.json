@@ -13,6 +13,7 @@
   "author": "Michael M. Tiller",
   "license": "MIT",
   "dependencies": {
+    "csv-parse": "^1.1.7",
     "kue": "^0.11.5",
     "temp": "^0.8.3"
   },
