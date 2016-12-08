@@ -14,8 +14,7 @@ export function omSimulate(model: string, source: string): Promise<Result> {
     // Open a temporary directory
     temp.mkdir('modelica-task', function (err, dirPath) {
       try {
-        console.log("temp dir = ", dirPath);
-        let scriptFile = path.join(dirPath, "run.omc");
+        let scriptFile = path.join(dirPath, "run.mos");
         let modelFile = path.join(dirPath, model + ".mo");
         let msl = false;
 
@@ -46,7 +45,6 @@ end if;
         process.chdir(dirPath);
         // Call omc
         exec("omc " + scriptFile, (err) => {
-          console.log("Job run ", err);
           if (err) {
             reject(err);
             return;
@@ -60,12 +58,11 @@ end if;
           let resFile = model + "_res.csv";
           let results = fs.readFileSync(resFile).toString();
           parseColumnMajor(results).then((v) => {
-            console.log("Got results!");
             resolve(v)
           });
         })
       } catch (e) {
-        console.error("Error while trying to compile and simulate " + model, e);
+        //console.error("Error while trying to compile and simulate " + model, e);
         reject(e);
       }
     });
