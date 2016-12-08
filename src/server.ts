@@ -1,6 +1,7 @@
 import kue = require('kue');
 import { Request } from './result';
 import { simulate } from './index';
+import process = require('process');
 
 const taskname = "simulateModelica";
 const concurrent = 4;
@@ -8,7 +9,13 @@ const concurrent = 4;
 // TODO: Add command line options
 export function run() {
     try {
-        kue.createQueue().process(taskname, concurrent, (job: any, done: any) => {
+        let options: kue.QueueOptions = {
+            redis: {
+                host: process.env("REDIS_HOST") || "localhost",
+                port: process.env("REDIS_PORT") || 6379,
+            },
+        }
+        kue.createQueue(options).process(taskname, concurrent, (job: any, done: any) => {
             try {
                 let req: Request = job.data;
                 console.log("Got job request: ", req);

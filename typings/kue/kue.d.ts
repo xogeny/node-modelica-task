@@ -145,5 +145,13 @@ declare module "kue" {
   export var redis: Redis;
   export var workers: Worker[];
 
-  export function createQueue(options?: Object): Queue;
+  export interface QueueOptions {
+    redis?: string | {
+      host?: string;
+      port?: number;
+      auth?: string;
+    };
+  }
+
+  export function createQueue(options?: QueueOptions): Queue;
 }
