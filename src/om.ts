@@ -48,7 +48,7 @@ end if;
         exec("omc " + scriptFile, (err) => {
           console.log("Job run ", err);
           if (err) {
-            resolve(err);
+            reject(err);
             return;
           }
           // Look for error.txt
