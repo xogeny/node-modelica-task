@@ -48,7 +48,7 @@ end if;
         // Call omc
         exec("omc " + scriptFile, (err) => {
           if (err) {
-            resolve(err);
+            reject(err);
             return;
           }
           // Look for error.txt
