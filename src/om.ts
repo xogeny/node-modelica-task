@@ -3,6 +3,7 @@ import { Result } from './result';
 import temp = require('temp');
 import fs = require('fs');
 import path = require('path');
+import { parseColumnMajor } from './parsing';
 //import { exec } from 'child_process';
 
 export function omSimulate(model: string, source: string): Promise<Result> {
@@ -52,13 +53,16 @@ end if;
           reject(new Error(message.toString()));
           return;
         }
+        let resFile = model+"_res.csv";
+        let results = fs.readFileSync(resFile).toString();
+        parseColumnMajor(results).then((v) => {
+          console.log("Got results!");
+          resolve(v)
+        });
       } catch (e) {
         console.error("Error while trying to compile and simulate "+model, e);
         reject(e);
       }
     });
-    resolve({
-      success: true
-    })
   });
 }
