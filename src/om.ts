@@ -12,11 +12,13 @@ export function omSimulate(model: string, source: string): Promise<Result> {
   return new Promise((resolve, reject) => {
     // Open a temporary directory
     temp.mkdir('modelica-task', function (err, dirPath) {
-      let scriptFile = path.join(dirPath, "run.omc");
-      let modelFile = path.join(dirPath, name + ".mo");
-      let msl = false;
+      try {
+        console.log("temp dir = ", dirPath);
+        let scriptFile = path.join(dirPath, "run.omc");
+        let modelFile = path.join(dirPath, model + ".mo");
+        let msl = false;
 
-      let script = `
+        let script = `
 setModelicaPath(getModelicaPath()+":"+".");
 useMSL := ${msl};
 if useMSL then
@@ -36,19 +38,23 @@ if rfile=="" then
    exit(1);
 end if;
 `
-      // Write script
-      fs.writeFileSync(scriptFile, script);
-      // Write modelica file
-      fs.writeFileSync(modelFile, source);
-      process.chdir(dirPath);
-      console.log("script =\n", source);
-      // Call omc
-      //exec("omc " + scriptFile);
-      // Look for error.txt
-      if (fs.existsSync("error.txt")) {
-        let message = fs.readFileSync("error.txt");
-        reject(new Error(message.toString()));
-        return;
+        console.log("script = ", script);
+        // Write script
+        fs.writeFileSync(scriptFile, script);
+        // Write modelica file
+        fs.writeFileSync(modelFile, source);
+        process.chdir(dirPath);
+        // Call omc
+        //exec("omc " + scriptFile);
+        // Look for error.txt
+        if (fs.existsSync("error.txt")) {
+          let message = fs.readFileSync("error.txt");
+          reject(new Error(message.toString()));
+          return;
+        }
+      } catch (e) {
+        console.error("Error while trying to compile and simulate "+model, e);
+        reject(e);
       }
     });
     resolve({

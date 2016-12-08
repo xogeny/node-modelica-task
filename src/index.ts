@@ -1,6 +1,6 @@
 import { omSimulate } from './om';
 import { Result } from './result';
 
-export function simulate(source: string): Promise<Result> {
-    return omSimulate(source);
+export function simulate(model: string, source: string): Promise<Result> {
+    return omSimulate(model, source);
 }
