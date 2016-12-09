@@ -11,18 +11,33 @@ export function run() {
     try {
         let options: kue.QueueOptions = {
             redis: {
-                host: process.env("REDIS_HOST") || "localhost",
-                port: process.env("REDIS_PORT") || 6379,
+                host: process.env["REDIS_HOST"] || "localhost",
+                port: process.env["REDIS_PORT"] || 6379,
             },
         }
+        console.log("redis options: ", options.redis);
         kue.createQueue(options).process(taskname, concurrent, (job: any, done: any) => {
             try {
-                let req: Request = job.data;
+                let req: Request = job.data.properties;
                 console.log("Got job request: ", req);
                 simulate(req.model, req.source, req.stopTime)
                     .then((result) => {
                         console.log("  Success");
-                        done(null, result)
+                        console.log("  Result:\n"+JSON.stringify(result, null, 4));
+                        let hyper = {
+                            metadata: {
+                                class: ["result"],
+                                description: "Simulation of "+req.model
+                            },
+                            properties: {
+                                model: req.model,
+                                createdAt: new Date().getTime(),
+                                traj: result
+                            },
+                            related: []
+                        } 
+                        console.log("  Hyper:\n"+JSON.stringify(hyper, null, 4));
+                        done(null, hyper)
                     },
                     (e) => {
                         console.warn("  Failed: ", e);

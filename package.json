@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "start": "tsc && node lib/src/server.js",
-    "test": "mocha"
+    "image": "docker build --build-arg NPM_TOKEN=`echo $NPM_TOKEN` -t xogeny/modelica-worker .",    "test": "mocha"
   },
   "keywords": [
     "modelica"

@@ -44,7 +44,9 @@ end if;
         fs.writeFileSync(modelFile, source);
         process.chdir(dirPath);
         // Call omc
-        exec("omc " + scriptFile, (err) => {
+        exec("omc " + scriptFile, (err, stdout, stderr) => {
+          console.log("STDOUT:\n"+stdout);
+          console.log("STDERR:\n"+stderr);
           if (err) {
             reject(err);
             return;
