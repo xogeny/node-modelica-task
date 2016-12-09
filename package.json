@@ -1,6 +1,6 @@
 {
   "name": "@xogeny/modelica-task",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Node module to run local Modelica simulations",
   "main": "lib/index.js",
   "scripts": {
