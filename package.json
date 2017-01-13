@@ -1,26 +1,32 @@
 {
-  "name": "@xogeny/modelica-task",
-  "version": "0.9.1",
-  "description": "Node module to run local Modelica simulations",
-  "main": "lib/index.js",
-  "scripts": {
-    "start": "tsc && node lib/src/server.js",
-    "image": "docker build --build-arg NPM_TOKEN=`echo $NPM_TOKEN` -t xogeny/modelica-worker .",    "test": "mocha"
-  },
-  "keywords": [
-    "modelica"
-  ],
-  "author": "Michael M. Tiller",
-  "license": "MIT",
-  "dependencies": {
-    "csv-parse": "^1.1.7",
-    "kue": "^0.11.5",
-    "temp": "^0.8.3"
-  },
-  "devDependencies": {
-    "chai": "^3.5.0",
-    "mocha": "^3.2.0",
-    "ts-node": "^1.7.0",
-    "typescript": "^2.1.4"
-  }
+    "name": "@xogeny/modelica-task",
+    "version": "0.9.1",
+    "description": "Node module to run local Modelica simulations",
+    "main": "lib/index.js",
+    "scripts": {
+        "start": "tsc && node lib/src/server.js",
+        "gen": "dockergen gen",
+        "image": "dockergen build --name xogeny/modelica-worker",
+        "test": "mocha"
+    },
+    "keywords": [
+        "modelica"
+    ],
+    "author": "Michael M. Tiller",
+    "license": "MIT",
+    "dockergen": {
+        "image": "mtiller/omnode"
+    },
+    "dependencies": {
+        "csv-parse": "^1.1.7",
+        "kue": "^0.11.5",
+        "temp": "^0.8.3"
+    },
+    "devDependencies": {
+        "chai": "^3.5.0",
+        "dockergen": "^0.2.3",
+        "mocha": "^3.2.0",
+        "ts-node": "^1.7.0",
+        "typescript": "^2.1.4"
+    }
 }
