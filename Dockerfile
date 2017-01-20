@@ -1,38 +1,36 @@
-# Start with an image that has OpenModelica installed
-FROM mclab/openmodelica
 
-# Now, install Node.js
-USER root
-RUN useradd -m docker && echo "docker:docker" | chpasswd && adduser docker sudo
-RUN apt-get update
-RUN apt-get install -y sudo
-RUN echo 'docker ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
-RUN mkdir -p /usr/src/app
-RUN chown -R docker /usr/src/app
-USER docker
-RUN sudo apt-get install -y apt-utils
-RUN sudo apt-get install -y build-essential
-RUN sudo apt-get install -y curl
+# Base image
+FROM mtiller/omnode
 
-RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-RUN sudo apt-get install -y nodejs
-RUN sudo apt-get install -y git
-#RUN sudo apt-get install -y npm 
+# Install yarn
+# N.B. - We don't use the preferred method because it has to be implemented 
+# differently on different platforms (depending on whether sudo is preset)
+RUN npm install --global yarn
 
 # Create app directory
+RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-ARG NPM_TOKEN
 # Install app dependencies
-COPY package.json /usr/src/app/
+ARG NPM_TOKEN
+RUN echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > .npmrc
 
-RUN npm install -d
-
-# Bundle app source
 COPY . /usr/src/app
 
-RUN sudo chown -R docker /usr/src/app
+# Install dependencies using Yarn
+RUN yarn install 
 
-#EXPOSE 8080
-RUN npm test
-CMD [ "npm", "start" ]
+# Now get rid of the embedded "secret" used to access private repositories
+RUN rm -f .npmrc
+
+# Environment variables that can be set via 'docker run -e ...'
+ENV REDIS_SERVER_HOST localhost
+ENV REDIS_SERVER_PORT 6379
+
+# No ports are exposed by this image
+
+
+# NPM Scripts to run *during build*
+RUN npm run test
+
+CMD [ "npm", "run", "start" ]

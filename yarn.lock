@@ -256,9 +256,9 @@ diff@^3.1.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/diff/-/diff-3.2.0.tgz#c9ce393a4b7cbd0b058a725c93df299027868ff9"
 
-dockergen@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/dockergen/-/dockergen-0.2.3.tgz#8acc59bb882541ac04fe384f38e288141fecfa2c"
+dockergen@^0.3.4:
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/dockergen/-/dockergen-0.3.4.tgz#d5ef860609a81f6ac7b80a7367a877ca1f4cec19"
   dependencies:
     yargs "^6.6.0"
 
