@@ -4,7 +4,8 @@
     "description": "Node module to run local Modelica simulations",
     "main": "lib/index.js",
     "scripts": {
-        "start": "tsc && node lib/src/server.js",
+        "start": "npm run compile && npm run server",
+        "server": "node lib/src/server.js",
         "compile": "tsc",
         "pushecr": "dockergen pushecr",
         "gen": "dockergen gen",
